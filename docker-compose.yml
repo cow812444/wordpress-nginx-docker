@@ -16,6 +16,8 @@ services:
     depends_on:
       - mysql
     restart: always
+    networks:
+      - blog_wpsite
 
   mysql:
     image: mariadb:${MARIADB_VERSION:-latest}
@@ -28,6 +30,8 @@ services:
       - MYSQL_PASSWORD=${MYSQL_PASSWORD:-password}
       - MYSQL_DATABASE=${MYSQL_DATABASE:-wordpress}
     restart: always
+    networks:
+      - blog_wpsite
 
   nginx:
     image: nginx:${NGINX_VERSION:-latest}
@@ -44,6 +48,9 @@ services:
     depends_on:
       - wordpress
     restart: always
+    networks:
+      - blog_wpsite
+
 
   adminer:
     image: adminer
@@ -52,3 +59,10 @@ services:
       - mysql
     ports:
       - 8080:8080
+    networks:
+      - blog_wpsite
+
+networks:
+    blog_wpsite:
+        external:
+            name: blog_wpsite
